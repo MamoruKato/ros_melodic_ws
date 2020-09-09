@@ -1,0 +1,38 @@
+digraph G {
+node [shape=box];
+"base_link" [label="base_link"];
+"L0" [label="L0"];
+"L1" [label="L1"];
+"L2" [label="L2"];
+"grasping_frame" [label="grasping_frame"];
+"L3" [label="L3"];
+"rgbd_camera_link" [label="rgbd_camera_link"];
+"rgbd_camera_depth_frame" [label="rgbd_camera_depth_frame"];
+"rgbd_camera_depth_optical_frame" [label="rgbd_camera_depth_optical_frame"];
+"rgbd_camera_optical_frame" [label="rgbd_camera_optical_frame"];
+"rgbd_camera_rgb_frame" [label="rgbd_camera_rgb_frame"];
+"rgbd_camera_rgb_optical_frame" [label="rgbd_camera_rgb_optical_frame"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"base_link" -> "q1" [label="xyz: 0.125 0 0 \nrpy: 0 -0 0"]
+"q1" -> "L0"
+"L0" -> "q2" [label="xyz: 0.2 0 0 \nrpy: -1.57 0 0"]
+"q2" -> "L1"
+"L1" -> "q3" [label="xyz: 0.3 0 0 \nrpy: 0 -0 0"]
+"q3" -> "L2"
+"L2" -> "grasping_frame_joint" [label="xyz: 0.28 -0.15 0 \nrpy: 0 -0 0"]
+"grasping_frame_joint" -> "grasping_frame"
+"L2" -> "q4" [label="xyz: 0.15 0 0 \nrpy: 1.57 -0 0"]
+"q4" -> "L3"
+"base_link" -> "rgbd_camera_joint" [label="xyz: 0.1 0 1 \nrpy: 0 1.309 0"]
+"rgbd_camera_joint" -> "rgbd_camera_link"
+"rgbd_camera_link" -> "rgbd_camera_depth_joint" [label="xyz: 0 0.049 0 \nrpy: 0 -0 0"]
+"rgbd_camera_depth_joint" -> "rgbd_camera_depth_frame"
+"rgbd_camera_depth_frame" -> "rgbd_camera_depth_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"rgbd_camera_depth_optical_joint" -> "rgbd_camera_depth_optical_frame"
+"rgbd_camera_link" -> "rgbd_camera_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"rgbd_camera_optical_joint" -> "rgbd_camera_optical_frame"
+"rgbd_camera_link" -> "rgbd_camera_rgb_joint" [label="xyz: 0 0.022 0 \nrpy: 0 -0 0"]
+"rgbd_camera_rgb_joint" -> "rgbd_camera_rgb_frame"
+"rgbd_camera_rgb_frame" -> "rgbd_camera_rgb_optical_joint" [label="xyz: 0 0 0 \nrpy: -1.5708 -5.55112e-17 -1.5708"]
+"rgbd_camera_rgb_optical_joint" -> "rgbd_camera_rgb_optical_frame"
+}

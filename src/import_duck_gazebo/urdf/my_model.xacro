@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+
+<robot name="drone" xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<xacro:include filename="$(find import_duck_gazebo)/urdf/wheel.urdf.xacro" /> 
+	
+  <property name="M_PI" value="3.1415926535897931" />
+  <property name="M_PI_2" value="1.570796327" />
+  <property name="DEG_TO_RAD" value="0.017453293" />
+
+  <!-- Main body radius and height -->
+  <!-- Main Body Cylinder base   -->
+  <property name="base_height" value="0.02" /> 
+  <property name="base_radius" value="0.15" /> 
+
+
+
+
+  <!-- Hokuyo Laser scanner -->
+  <property name="hokuyo_size" value="0.05" />
+
+
+
+  <!-- Macro for calculating inertia of cylinder -->
+  <macro name="cylinder_inertia" params="m r h">
+    <inertia  ixx="${m*(3*r*r+h*h)/12}" ixy = "0" ixz = "0"
+              iyy="${m*(3*r*r+h*h)/12}" iyz = "0"
+              izz="${m*r*r/2}" /> 
+  </macro>
+
+  <link name="base_footprint">
+    <inertial>
+      <mass value="0.0001" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+          iyy="0.0001" iyz="0.0" 
+          izz="0.0001" />
+    </inertial>
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+            <box size="0.001 0.001 0.001" />
+        </geometry>
+    </visual>
+  </link>
+
+  <gazebo reference="base_footprint">
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <origin xyz="0 0 ${wheel_radius - base_z_origin_to_wheel_origin}" rpy="0 0 0" />
+    <parent link="base_footprint"/>
+    <child link="drone_link" />
+  </joint>
+
+<!-- Girona 500 link -->
+
+	<link name="drone_link">
+		<inertial>
+			<mass value="2" />
+			<origin xyz="0 0 0" />
+			<inertia ixx="0.01152" ixy="0.0" ixz="0.0" iyy="0.01152" iyz="0.0" izz="0.0218" />
+		</inertial>
+
+		<visual>
+			<origin xyz="0 0 0.5" rpy="${M_PI} 0 0" />
+			<geometry>
+	  		<mesh filename="package://import_duck_gazebo/meshes/girona500.dae"/>
+			</geometry>
+		</visual>
+
+		<collision>
+			<origin xyz="0 0 0" rpy="${M_PI + M_PI/6 - M_PI/36} 0 0" />
+			<geometry>
+	  			<mesh filename="package://import_duck_gazebo/meshes/girona500.stl"/>
+			</geometry>
+		</collision>
+	</link>
+
+	<gazebo reference="drone_link">
+		<material>Gazebo/Yellow</material>
+	</gazebo>
+
+
+
+
+	<!-- Sensors -->
+
+  <link name="hokuyo_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="${hokuyo_size} ${hokuyo_size} ${hokuyo_size}"/>
+      </geometry>
+      <material name="Blue" />
+    </visual>
+  </link>
+
+  <joint name="hokuyo_joint" type="fixed">
+    <origin xyz="${base_radius - hokuyo_size/2 + 0.5} 0 ${base_height+hokuyo_size/4 +0.5}" rpy="0 0 0" />
+    <parent link="drone_link"/>
+    <child link="hokuyo_link" />
+  </joint>
+
+  <gazebo reference="hokuyo_link">
+    <material>Gazebo/Blue</material>
+    <turnGravityOff>false</turnGravityOff>
+    <sensor type="ray" name="head_hokuyo_sensor">
+      <pose>${hokuyo_size/2} 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.570796</min_angle>
+            <max_angle>1.570796</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>10.0</max>
+          <resolution>0.001</resolution>
+        </range>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+        <topicName>/scan</topicName>
+        <frameName>hokuyo_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+	<gazebo>
+		<plugin name="gazebo_ros_control" filename="lib_gazebo_ros_control">
+			<robotNamespace>/drone</robotNamespace>
+		</plugin>
+	</gazebo>
+  	
+ 
+</robot>

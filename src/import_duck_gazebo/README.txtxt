@@ -1,0 +1,2 @@
+roslaunch import_duck_gazebo import_duck_gazebo.launch (launches AUV com rodas --- zoeira.xacro -- file)
+rosrun first_sim_position position_node (launches um nó pra fazer o AUV com rodas se mover em direção ao objeto)

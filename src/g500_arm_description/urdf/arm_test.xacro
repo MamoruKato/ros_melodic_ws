@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<robot name="g500_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+   <xacro:macro name="inertial_matrix" params="mass">
+      <inertial>
+      	<mass value="${mass}" />
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="1.0" />
+      </inertial>
+   </xacro:macro>
+
+   <xacro:macro name="transmission_block" params="joint_name">
+    <transmission name="${joint_name}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint_name}">
+        <hardwareInterface>PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${joint_name}_motor">
+        <hardwareInterface>PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+   </xacro:macro>
+
+
+
+  <!-- base of the robot -->
+
+  <link name="bottom_link" />
+
+  <link name="base" >
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0" />
+      <geometry>
+        <box size="0.5 0.5 0.2" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="1 1 0.2" />
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="100" />
+  </link>
+
+  <joint name="botton_link_joint" type="fixed" >
+    <origin rpy="0 0 0" xyz="0 0 0" />
+    <parent link="bottom_link" />
+    <child link="base"/>
+  </joint>
+
+  <link name="base_link">
+    <visual>
+        <origin rpy="0 0 0" xyz="0 0 0.05" />
+        <geometry>
+            <cylinder length="0.1" radius="0.05" /> 
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.75 0.75 0.75 1.0"/>
+      </material>
+    </visual>
+    <colision>
+        <origin rpy="0 0 0" xyz="0 0 0 " />
+        <geometry>
+            <cylinder length="0.1" radius="0.05"/>
+        </geometry>
+    </colision>
+    <xacro:inertial_matrix mass="1" />
+  </link>
+
+  <joint name="base_link_joint" type="revolute" >
+    <origin rpy="0 0 0" xyz="0 0 0.1" />
+    <parent link="base" />
+    <child link="base_link" />
+    <axis xyz="0 0 1" />
+    <limit effort="300" lower="-3.14" upper="3.14" velocity="1" />
+  </joint>
+
+  <gazebo reference="base_link" >
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <link name="after_base_link" >
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.15"/>
+      <geometry>
+        <box size="0.05 0.05 0.3" />
+      </geometry>
+      <material name="LightGrey">
+        <color rgba="0.75 0.75 0.75 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <box size="0.05 0.05 0.3" />
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="1" />
+  </link>
+
+  <joint name="after_base_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0.1" />
+    <parent link="base_link" />
+    <child link="after_base_link" />
+    <axis xyz="0 1 0" />
+    <limit effort="300" lower="${-3.14/2}" upper="${3.14/2}" velocity="1" />
+  </joint>
+
+  <link name="effector_link" >
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.025" />
+      <geometry>
+        <cylinder length="0.05" radius="0.03" />
+      </geometry>
+      <material name="LightGrey">
+        <color rgba="0.75 0.75 0.75 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.05" />
+      <geometry>
+        <cylinder length="0.05" radius="0.01" />
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="1" />
+  </link>
+
+  <joint name="effector_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0.3" />
+    <parent link="after_base_link" />
+    <child link="effector_link" />
+    <axis xyz="0 0 1" />
+    <limit effort="300" lower="-3.14" upper="3.14" velocity="1" />
+  </joint>
+
+  <!-- END EFFECTOR DESCRIPTION -->
+  <link name="end_effector_link1" >
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.025" />
+      <geometry>
+        <box size="0.01 0.01 0.05" />
+      </geometry>
+      <material name="LightGrey">
+        <color rgba="0.75 0.75 0.75 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.025" />
+      <geometry>
+        <box size="0.01 0.01 0.05" />
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="1" />
+  </link>
+
+  <gazebo reference="end_effector_link" >
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <joint name="end_effector_joint1" type="prismatic" >
+    <origin rpy="0 0 0" xyz="0.01 0 0.05" />
+    <parent link="effector_link" />
+    <child link="end_effector_link1" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" lower="0" upper="0.015" velocity="1" />
+  </joint>
+
+    <link name="end_effector_link2" >
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.012 0 0.025" />
+      <geometry>
+        <box size="0.01 0.01 0.05" />
+      </geometry>
+      <material name="LightGrey">
+        <color rgba="0.75 0.75 0.75 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.025" />
+      <geometry>
+        <box size="0.01 0.01 0.05" />
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="1" />
+  </link>
+
+  <gazebo reference="end_effector_link" >
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <joint name="end_effector_joint2" type="prismatic" >
+    <origin rpy="0 0 0" xyz="-0.01 0 0.05" />
+    <parent link="effector_link" />
+    <child link="end_effector_link2" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" lower="-0.015" upper="0" velocity="1" />
+  </joint>
+
+
+
+
+
+
+  <xacro:transmission_block joint_name="base_link_joint" />
+  <xacro:transmission_block joint_name="after_base_joint" />
+  <xacro:transmission_block joint_name="effector_joint" />
+  <xacro:transmission_block joint_name="end_effector_joint" />
+
+<!--
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/arm_test</robotNamespace>
+    </plugin>
+  </gazebo>
+-->
+
+</robot>

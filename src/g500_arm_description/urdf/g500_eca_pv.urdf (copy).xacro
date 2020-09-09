@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<robot name="g500_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- base link is the body of the robot -->
+  <link name="base_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+          <sphere radius="0.03"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="baselink_to_base" type="revolute">
+    <parent link="base_link"/>
+    <child link="base"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="0.045 0 0" xyz="0.25 0 0"/>
+    <limit effort="30.0" lower="-3.14" upper="3.14" velocity="0.025"/>
+  </joint>
+
+  <link name="base">
+    <visual>
+      <origin rpy="0 0 0" xyz="0.0 0 0.0"/>
+      <geometry>
+        <mesh filename="package://g500_arm_description/meshes/robot/ECA/arm0.3ds" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="Grey">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="-0.2 0 0.0"/>
+      <geometry>
+        <box size="0.25 0.12 0.2" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="q1" type="revolute">
+    <parent link="base"/>
+    <child link="L0"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    <limit effort="30" lower="-0.43" upper="1.54" velocity="0.025"/>
+  </joint>
+
+  <link name="L0">
+  	<visual>
+      <origin xyz="0.0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://g500_arm_description/meshes/robot/ECA/arm1.3ds" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="LightGrey">
+        <color rgba="0.75 0.75 0.75 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.18 0 0" rpy="0 0 0"/>
+		  <geometry>
+				<box size="0.2 0.1 0.18" />
+			</geometry>
+		</collision>
+   </link>
+
+
+  <joint name="q2" type="revolute">
+    <parent link="L0"/>
+    <child link="L1"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="-1.57 0.0 0.0" xyz="0.108 0.0 0.0"/>
+    <limit effort="30" lower="-0.10" upper="1.45" velocity="0.025"/>
+  </joint>
+
+   <link name="L1">
+    <visual>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://g500_arm_description/meshes/robot/ECA/arm2.3ds" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="Grey">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.2 0 0.0"/>
+		<geometry>
+      <box size="0.3 0.2 0.15" />
+		</geometry>
+	 </collision>
+  </link>
+
+  <joint name="q3" type="revolute">
+    <parent link="L1"/>
+    <child link="L2"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0.0 0 0" xyz="0.231 0.0 0.0"/>
+    <limit effort="30" lower="-1.22" upper="0.645" velocity="0.09"/>
+  </joint>
+
+  <link name="L2">
+    <visual>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+        <geometry>
+          <mesh filename="package://g500_arm_description/meshes/robot/ECA/arm3.3ds" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.75 0.75 0.75 1.0"/>
+        </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.15 0.08 0.12" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="q4" type="revolute">
+    <parent link="L2"/>
+    <child link="L3"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="1.57 0 0" xyz="0.1 0.0 0.0"/>
+    <limit effort="30" lower="-3.12" upper="3.12" velocity="0.09"/>
+  </joint>
+
+  <link name="L3">
+    <visual>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://g500_arm_description/meshes/robot/ECA/arm4.3ds" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="LightBlack">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.15"/>
+      <geometry>
+        <box size="0.12 0.2 0.28" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="jaw" type="fixed">
+    <parent link="L3"/>
+    <child link="L4"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.328"/>
+  </joint>
+
+  <link name="L4">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+          <sphere radius="0.03"/>
+      </geometry>
+    </visual>
+  </link>
+
+</robot>

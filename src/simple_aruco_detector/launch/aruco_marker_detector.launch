@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="camera_config_file" default="/home/bruno/melodic_ws/src/simple_aruco_detector/config/calibration_params.yml" />
+    <node pkg="simple_aruco_detector" type="aruco_marker_detector_node" name="aruco_marker_detector_node" output="screen" >
+          <param name="camera_config_file_value" type="string" value="$(arg camera_config_file)" />
+    </node>
+</launch>

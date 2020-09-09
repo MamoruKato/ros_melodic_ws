@@ -1,0 +1,4 @@
+controller_list:
+  - name: fake_stepper_controller
+    joints:
+      - base_link__link_01

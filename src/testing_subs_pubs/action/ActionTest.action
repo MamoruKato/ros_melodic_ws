@@ -1,0 +1,6 @@
+std_msgs/Float32 required_time
+std_msgs/Float32 goalDistance
+---
+std_msgs/String message
+---
+std_msgs/Float32 distance

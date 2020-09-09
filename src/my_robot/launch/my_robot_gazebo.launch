@@ -1,0 +1,19 @@
+<launch>
+
+
+  <!-- Launch Gazebo  -->
+  <include file="$(find my_robot)/launch/my_robot.launch" />   
+
+  <!-- ros_control seven dof arm launch file -->
+  <include file="$(find my_robot)/launch/my_robot_config.launch" />   
+
+  <!-- ros_control position control dof arm launch file -->
+  <!--<include file="$(find my_robot)/launch/mt_robot_efforts.launch" />  -->
+  
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="/use_gui" value="false"/>
+    <rosparam param="/source_list">[/my_robot/joint_states]</rosparam>
+  </node>
+
+</launch>

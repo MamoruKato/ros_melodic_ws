@@ -1,0 +1,18 @@
+my_robot:
+ Joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+ #Velocity Controllers ------------------------------------	
+ bl_joint_velocity_controller:
+  type: effort_controllers/JointEffortController
+  joint: bl_wheel_joint
+ br_joint_velocity_controller:
+  type: effort_controllers/JointEffortController
+  joint: br_wheel_joint
+ fl_joint_velocity_controller:
+  type: effort_controllers/JointEffortController
+  joint: fl_wheel_joint
+ fr_joint_velocity_controller:
+  type: effort_controllers/JointEffortController
+  joint: fr_wheel_joint

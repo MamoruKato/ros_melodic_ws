@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: g500_arm_description
+    relative_path: urdf/g500_eca_pv.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/g500_arm.srdf
+  CONFIG:
+    author_name: asdsads
+    author_email: dasdsada@gmail.com
+    generated_timestamp: 1568640084
